@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JavaScript Object Example</title>
+</head>
+<body>
+
+<h2>Car Info</h2>
+<p id="hoverText">Hover over me!</p>
+
+
+ 
+
+<script>
+  const hoverElement = document.getElementById("hoverText");
+
+  hoverElement.addEventListener("mouseover", function() {
+    this.innerText = "Thanks for hovering!";
+  });
+
+  hoverElement.addEventListener("mouseout", function() {
+    this.innerText = "Hover over me!";
+    });
+</script>
+
+
+
+</body>
+</html>
