@@ -62,9 +62,7 @@ app.get('/users', async (req, res) => {
         const db = client.db('myDatabase');
         const collection = db.collection('users');
 
-        const users = await db.collection('yourCollectionName')
-                      .find({}, { projection: { _id: 0 } })
-                      .toArray();
+        const users = await db.collection('yourCollectionName').find({}).toArray();
         res.status(200).json(users); // Send all user data
     } catch (err) {
         console.error("❌ Error fetching users:", err);
