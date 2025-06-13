@@ -56,13 +56,15 @@ app.get('/query', (req, res) => {
     }
     res.json({ status: false, id: null, value: null });
 });
-
+//users
 app.get('/users', async (req, res) => {
     try {
         const db = client.db('myDatabase');
         const collection = db.collection('users');
 
-        const users = await collection.find({}).toArray();
+        const users = await db.collection('yourCollectionName')
+                      .find({}, { projection: { _id: 0 } })
+                      .toArray();
         res.status(200).json(users); // Send all user data
     } catch (err) {
         console.error("❌ Error fetching users:", err);
