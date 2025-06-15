@@ -1,3 +1,4 @@
+//import statements
 require('dotenv').config();
 const express = require('express');
 const { MongoClient } = require('mongodb');
@@ -34,28 +35,7 @@ const map = {
 // Routes
 app.get('/', (req, res) => res.send('Hello, Marcus!'));
 
-app.get('/admin', (req, res) => {
-    res.sendFile(path.join(__dirname, 'today.html'));
-});
 
-app.get('/about', (req, res) => res.send('This is the about page.'));
-
-app.get('/map', (req, res) => res.json(map));
-
-app.get('/map/:id', (req, res) => {
-    const word = map[req.params.id];
-    res.json(word || "Invalid ID");
-});
-
-app.get('/query', (req, res) => {
-    const val = req.query.val;
-    for (let i = 1; i <= 10; i++) {
-        if (map[i] === val) {
-            return res.json({ status: true, id: i, value: map[i] });
-        }
-    }
-    res.json({ status: false, id: null, value: null });
-});
 //users
 app.get('/users', async (req, res) => {
     try {
@@ -100,7 +80,31 @@ app.post('/add_user', async (req, res) => {
     }
 });
 
+app.
+
 // Start server
 app.listen(PORT, () => {
     console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+// app.get('/admin', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'today.html'));
+// });
+
+// app.get('/about', (req, res) => res.send('This is the about page.'));
+
+// app.get('/map', (req, res) => res.json(map));
+
+// app.get('/map/:id', (req, res) => {
+//     const word = map[req.params.id];
+//     res.json(word || "Invalid ID");
+// });
+
+// app.get('/query', (req, res) => {
+//     const val = req.query.val;
+//     for (let i = 1; i <= 10; i++) {
+//         if (map[i] === val) {
+//             return res.json({ status: true, id: i, value: map[i] });
+//         }
+//     }
+//     res.json({ status: false, id: null, value: null });
+// });
