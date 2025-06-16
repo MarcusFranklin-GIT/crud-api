@@ -73,7 +73,7 @@ app.post('/add_user', async (req, res) => {
         const result = await collection.insertOne(user);
         console.log("✅ User inserted:", result.insertedId);
 
-        res.status(201).send('User added successfully');
+        res.status(200).send('User added successfully');
     } catch (err) {
         console.error("❌ Error in /add_user:", err);
         res.status(500).send('Server error');
