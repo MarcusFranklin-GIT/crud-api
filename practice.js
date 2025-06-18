@@ -10,6 +10,8 @@ app.use(express.json());
 let client;
 let db;
 
+
+//test program
 let object={
     1:'marcus',
     2:'mohamed',
@@ -37,7 +39,9 @@ app.get('/name/:id',function(req,res){
 app.listen(9000,()=>{
     console.log('running....');
 })
+//end of test program (local server)
 
+//creating a connection with db
 async function ConnectToMongo() {
     try{
         client=await MongoClient.connect(process.env.MONGO_URL)
@@ -47,7 +51,10 @@ async function ConnectToMongo() {
         console.error("❌ MongoDB connection error:", err);
     }
 }
+//calling the function to connect to MongoDB
 ConnectToMongo();
+
+
 //create
 app.post('/add_user',async (req,res)=>{
 
