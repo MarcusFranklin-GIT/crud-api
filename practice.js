@@ -1,3 +1,4 @@
+//import statements
 const express= require('express');
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
@@ -6,7 +7,7 @@ const { MongoClient } = require('mongodb');
 const app=express();
 
 app.use(express.json());
-
+//declare global variables
 let client;
 let db;
 
