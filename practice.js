@@ -78,15 +78,31 @@ app.get('/users',async (req, res) => {
 app.get('/users/:id', async (req, res) => {
 
     try{
-        const id = req.params.id;
+        const id =parseInt(req.params.id);
+        console.log("Fetching user with ID:", id);
         const collection = db.collection('Users');
-
-        const user =await collection.findOne({ email: id });
+        if(isNaN(id)) {
+            const email = req.params.id;
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const isValidEmail = regex.test(email);
+            console.log(isValidEmail);
+            if(!isValidEmail) {
+                return res.status(400).send("Invalid email format");
+            }
+            const user =await collection.findOne({ email: email });
+            if(user){
+                res.status(200).json(user);
+            } else {
+                res.status(404).send("User not found");
+            }
+            
+        }
+       else{ const user =await collection.findOne({ id: id });
         if(user){
             res.status(200).json(user);
         } else {
             res.status(404).send("User not found");
-        }
+        }}
     }catch(err) {
         console.error("❌ Error fetching user:", err);
         res.status(500).send("Server error");
@@ -96,16 +112,54 @@ app.get('/users/:id', async (req, res) => {
 
 app.delete('/delete_user/:id', async (req, res) => {
     try{
-        const id = req.params.id;
+        const id =parseInt(req.params.id);
+        console.log("Fetching user with ID:", id);
         const collection = db.collection('Users');
-        const result = await collection.deleteOne({ email: id });
-        if(result.deletedCount > 0) {
+        if(isNaN(id)) {
+            const email = req.params.id;
+            const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const isValidEmail = regex.test(email);
+            console.log(isValidEmail);
+            if(!isValidEmail) {
+                return res.status(400).send("Invalid email format");
+            }
+            const user =await collection.deleteOne({ email: email });
+            if(user.deletedCount > 0){
+                res.status(200).send("User deleted successfully");
+            } else {
+                res.status(404).send("User not found");
+            }
+            
+        }
+       else{ const user =await collection.deleteOne({ id: id });
+        if(user.deletedCount > 0){
             res.status(200).send("User deleted successfully");
         } else {
             res.status(404).send("User not found");
-        }
-    } catch(err) {
-        console.error("❌ Error deleting user:", err);
+        }}
+    }catch(err) {
+        console.error("❌ Error fetching user:", err);
         res.status(500).send("Server error");
     }
 });
+
+app.put('/update_user/:id', async (req, res) => {
+    try{
+        const id = req.params.id;
+        const updatedUser = req.body;
+        const collection = db.collection('Users');
+
+        const result = await collection.updateOne({ email: id }, 
+            { $set: updatedUser }
+
+        );
+        if(result.matchedCount > 0) {
+            res.status(200).send("User updated successfully");
+        } else {
+            res.status(404).send("User not found");
+        }
+     } catch(err) {
+        console.error("❌ Error updating user:", err);
+        res.status(500).send("Server error");
+    }
+})
