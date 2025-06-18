@@ -48,7 +48,7 @@ async function ConnectToMongo() {
     }
 }
 ConnectToMongo();
-
+//create
 app.post('/add_user',async (req,res)=>{
 
     const user=req.body;
@@ -63,7 +63,7 @@ app.post('/add_user',async (req,res)=>{
         res.status(500).send("Server error");
     }
 });
-
+//retrive all users
 app.get('/users',async (req, res) => {
     try{
         const collection= db.collection('Users');
@@ -74,7 +74,7 @@ app.get('/users',async (req, res) => {
         res.status(500).send("Server error");
     }
 });
-
+//retrive user by id or email
 app.get('/users/:id', async (req, res) => {
 
     try{
@@ -108,8 +108,30 @@ app.get('/users/:id', async (req, res) => {
         res.status(500).send("Server error");
     }
 });
+// Update user by id or email
 
+app.put('/update_user/:id', async (req, res) => {
+    try{
+        const id = req.params.id;
+        const updatedUser = req.body;
+        const collection = db.collection('Users');
 
+        const result = await collection.updateOne({ email: id }, 
+            { $set: updatedUser }
+
+        );
+        if(result.matchedCount > 0) {
+            res.status(200).send("User updated successfully");
+        } else {
+            res.status(404).send("User not found");
+        }
+     } catch(err) {
+        console.error("❌ Error updating user:", err);
+        res.status(500).send("Server error");
+    }
+})
+
+//delete user by id or email
 app.delete('/delete_user/:id', async (req, res) => {
     try{
         const id =parseInt(req.params.id);
@@ -142,24 +164,3 @@ app.delete('/delete_user/:id', async (req, res) => {
         res.status(500).send("Server error");
     }
 });
-
-app.put('/update_user/:id', async (req, res) => {
-    try{
-        const id = req.params.id;
-        const updatedUser = req.body;
-        const collection = db.collection('Users');
-
-        const result = await collection.updateOne({ email: id }, 
-            { $set: updatedUser }
-
-        );
-        if(result.matchedCount > 0) {
-            res.status(200).send("User updated successfully");
-        } else {
-            res.status(404).send("User not found");
-        }
-     } catch(err) {
-        console.error("❌ Error updating user:", err);
-        res.status(500).send("Server error");
-    }
-})
